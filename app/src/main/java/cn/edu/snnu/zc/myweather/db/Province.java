@@ -1,9 +1,12 @@
 package cn.edu.snnu.zc.myweather.db;
 
-public class Province {
+import org.litepal.crud.LitePalSupport;
+
+public class Province extends LitePalSupport {
     private int id;
 
-    private String provinceCode;
+    private String provinceName;
+    private int provinceCode;
 
     public int getId() {
         return id;
@@ -13,11 +16,19 @@ public class Province {
         this.id = id;
     }
 
-    public String getProvinceCode() {
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public int getProvinceCode() {
         return provinceCode;
     }
 
-    public void setProvinceCode(String provinceCode) {
+    public void setProvinceCode(int provinceCode) {
         this.provinceCode = provinceCode;
     }
 }

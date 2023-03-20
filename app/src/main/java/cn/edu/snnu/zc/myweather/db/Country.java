@@ -1,6 +1,8 @@
 package cn.edu.snnu.zc.myweather.db;
 
-public class Country {
+import org.litepal.crud.LitePalSupport;
+
+public class Country  extends LitePalSupport {
     private int id;
 
     private String countryName;
