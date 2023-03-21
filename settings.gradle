@@ -10,6 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        jcenter{url 'https://maven.aliyun.com/repository/public' }
+        maven {url 'https://jitpack.io'}
     }
 }
 rootProject.name = "MyWeather"

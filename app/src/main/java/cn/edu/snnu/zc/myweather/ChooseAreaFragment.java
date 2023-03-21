@@ -15,9 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -113,7 +113,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryProvinces(){
         mTitleText.setText("中国");
         mBackButton.setVisibility(View.GONE);
-        mProvinceList=DataSupport.findAll(Province.class);
+        mProvinceList= LitePal.findAll(Province.class);
         if (mProvinceList.size()>0){
             mDataList.clear();
             for (Province province:mProvinceList) {
@@ -131,7 +131,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities(){
         mTitleText.setText(mSelectedProvince.getProvinceName());
         mBackButton.setVisibility(View.VISIBLE);
-        mCountryList=DataSupport.where("cityid = ? ",String.valueOf(mSelectedCity.getId())).find(Country.class);
+        mCountryList=LitePal.where("cityid = ? ",String.valueOf(mSelectedCity.getId())).find(Country.class);
         if (mCountryList.size()>0){
             mDataList.clear();
             for (Country country:mCountryList) {
@@ -152,7 +152,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCountries(){
         mTitleText.setText(mSelectedCity.getCityName());
         mBackButton.setVisibility(View.GONE);
-        mCityList=DataSupport.where("provinceid = ? ",String.valueOf(mSelectedProvince.getId())).find(City.class);
+        mCityList=LitePal.where("provinceid = ? ",String.valueOf(mSelectedProvince.getId())).find(City.class);
         if (mCityList.size()>0){
             mDataList.clear();
             for (City city:mCityList) {
@@ -183,6 +183,7 @@ public class ChooseAreaFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        closeProgressDialog();
                         Toast.makeText(getContext(),"加载失败",Toast.LENGTH_SHORT).show();
                     }
                 });
