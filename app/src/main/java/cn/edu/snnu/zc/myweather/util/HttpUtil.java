@@ -2,6 +2,9 @@ package cn.edu.snnu.zc.myweather.util;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+/**
+ * 网络请求工具
+ */
 
 public class HttpUtil {
 
