@@ -4,6 +4,6 @@
     <list>
         <mapping class="cn.edu.snnu.zc.myweather.db.Province"/>
         <mapping class="cn.edu.snnu.zc.myweather.db.City"/>
-        <mapping class="cn.edu.snnu.zc.myweather.db.Country"/>
+        <mapping class="cn.edu.snnu.zc.myweather.db.County"/>
     </list>
 </litepal>

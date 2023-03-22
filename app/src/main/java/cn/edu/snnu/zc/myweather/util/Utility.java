@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.edu.snnu.zc.myweather.db.City;
-import cn.edu.snnu.zc.myweather.db.Country;
+import cn.edu.snnu.zc.myweather.db.County;
 import cn.edu.snnu.zc.myweather.db.Province;
 import cn.edu.snnu.zc.myweather.gson.Weather;
 
@@ -29,6 +29,7 @@ public class Utility {
 //                    将数据存储在数据库中
                     province.save();
                 }
+                return true;
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -49,6 +50,7 @@ public class Utility {
                     city.setProvinceId(provinceId);
                     city.save();
                 }
+                return true;
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -58,18 +60,19 @@ public class Utility {
 
 
 //    解析和处理返回的县级数据
-    public static boolean handleCountryResponse(String response,int cityId){
+    public static boolean handleCountyResponse(String response,int cityId){
         if (!TextUtils.isEmpty(response)){
             try {
                 JSONArray allCounties= new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
                     JSONObject countObject = allCounties.getJSONObject(i);
-                    Country country = new Country();
-                    country.setCountryName(countObject.getString("name"));
-                    country.setWeatherId(countObject.getString("weather_id"));
-                    country.setCityId(cityId);
-                    country.save();
+                    County county = new County();
+                    county.setCountryName(countObject.getString("name"));
+                    county.setWeatherId(countObject.getString("weather_id"));
+                    county.setCityId(cityId);
+                    county.save();
                 }
+                return true;
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
