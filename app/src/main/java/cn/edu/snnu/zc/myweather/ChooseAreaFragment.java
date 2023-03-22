@@ -1,6 +1,7 @@
 package cn.edu.snnu.zc.myweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,12 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel==LEVEL_CITY) {
                     mSelectedCity=mCityList.get(position);
                     queryCountries();
+                }else if (currentLevel==LEVEL_COUNTY){
+                    String weatherId=mCountryList.get(position).getWeatherId();
+                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -131,6 +138,22 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities(){
         mTitleText.setText(mSelectedProvince.getProvinceName());
         mBackButton.setVisibility(View.VISIBLE);
+        mCityList=LitePal.where("provinceid=?",String.valueOf(mSelectedProvince.getId())).find(City.class);
+        if (mCityList.size()>0){
+            mDataList.clear();
+            for (City city:mCityList) {
+                mDataList.add(city.getCityName());
+            }
+            mAdapter.notifyDataSetChanged();
+            mListView.setSelection(0);
+            currentLevel=LEVEL_CITY;
+        }else{
+            int provinceCode=mSelectedProvince.getProvinceCode();
+            String address="http://guolin.tech/api/china"+provinceCode;
+            queryFromServer(address,"city");
+        }
+
+
         mCountryList=LitePal.where("cityid = ? ",String.valueOf(mSelectedCity.getId())).find(Country.class);
         if (mCountryList.size()>0){
             mDataList.clear();
@@ -151,22 +174,22 @@ public class ChooseAreaFragment extends Fragment {
 
     private void queryCountries(){
         mTitleText.setText(mSelectedCity.getCityName());
-        mBackButton.setVisibility(View.GONE);
-        mCityList=LitePal.where("provinceid = ? ",String.valueOf(mSelectedProvince.getId())).find(City.class);
-        if (mCityList.size()>0){
+        mBackButton.setVisibility(View.VISIBLE);
+        mCountryList= LitePal.where("cityid=?", String.valueOf(mSelectedCity.getId())).find(Country.class);
+        if (mCountryList.size()>0){
             mDataList.clear();
-            for (City city:mCityList) {
-                mDataList.add(city.getCityName());
+            for (Country country:mCountryList) {
+                mDataList.add(country.getCountryName());
             }
             mAdapter.notifyDataSetChanged();
             mListView.setSelection(0);
-            currentLevel=LEVEL_CITY;
+            currentLevel=LEVEL_COUNTY;
         }else {
-            int provinceCode = mSelectedProvince.getProvinceCode();
-            String address="http://guolin.tech/api/china/"+provinceCode;
-            queryFromServer(address,"city");
+            int provinceCode=mSelectedProvince.getProvinceCode();
+            int cityCode = mSelectedCity.getCityCode();
+            String address="http://guolin.tech/api/china/"+provinceCode+"/"+cityCode;
+            queryFromServer(address,"country");
         }
-
     }
 
 
@@ -223,7 +246,7 @@ public class ChooseAreaFragment extends Fragment {
     private void showProgressDialog(){
         if (mProgressDialog==null){
             mProgressDialog=new ProgressDialog(getActivity());
-            mProgressDialog.setMessage("正在加载");
+            mProgressDialog.setMessage("正在加载...");
             mProgressDialog.setCanceledOnTouchOutside(false);
         }
         mProgressDialog.show();
