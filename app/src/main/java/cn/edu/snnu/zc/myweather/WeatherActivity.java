@@ -1,6 +1,7 @@
 package cn.edu.snnu.zc.myweather;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -28,6 +29,7 @@ import java.io.IOException;
 
 import cn.edu.snnu.zc.myweather.gson.Forecast;
 import cn.edu.snnu.zc.myweather.gson.Weather;
+import cn.edu.snnu.zc.myweather.service.AutoUpdateService;
 import cn.edu.snnu.zc.myweather.util.HttpUtil;
 import cn.edu.snnu.zc.myweather.util.Utility;
 import okhttp3.Call;
@@ -37,7 +39,7 @@ import okhttp3.Response;
 public class WeatherActivity extends AppCompatActivity {
 
 
-    private DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
 
     private Button navButton;
 
@@ -203,6 +205,10 @@ public class WeatherActivity extends AppCompatActivity {
         carwashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
+
     }
 
 //    加载每日背景图
